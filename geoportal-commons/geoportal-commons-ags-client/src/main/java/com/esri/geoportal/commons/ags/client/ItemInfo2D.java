@@ -18,7 +18,7 @@ package com.esri.geoportal.commons.ags.client;
 /**
  * Item Info.
  */
-public final class ItemInfo {
+public final class ItemInfo2D {
   public String culture;
   public String name;
   public String guid;
@@ -32,7 +32,7 @@ public final class ItemInfo {
   public String [] typeKeywords;
   public String thumbnail;
   public String url;
-  public Double [] extent;
+  public Double [][] extent;
   public String spatialReference;
   public String accessInformation;
   public String licenseInfo;

@@ -19,6 +19,7 @@ import com.esri.geoportal.commons.utils.SimpleCredentials;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonParser.Feature;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.Closeable;
@@ -230,7 +231,7 @@ public class AgsClient implements Closeable {
       try {
         // try reading with extent as 1D array      
         response = mapper.readValue(responseContent, ItemInfo.class);      
-      } catch (Exception ex) {
+      } catch (JsonProcessingException ex) {
         ItemInfo2D response2D = mapper.readValue(responseContent, ItemInfo2D.class);
         response = convertItemInfo2Dto1D(response2D);        
       }

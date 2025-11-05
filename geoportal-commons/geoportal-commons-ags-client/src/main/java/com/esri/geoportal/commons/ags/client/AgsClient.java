@@ -268,7 +268,7 @@ public class AgsClient implements Closeable {
           List<Double> flatExtent = new ArrayList<>();
           for (Double[] row : source.extent) {
               if (row != null) {
-                boolean addAll = flatExtent.addAll(Arrays.asList(row));
+                flatExtent.addAll(Arrays.asList(row));
               }
           }
           target.extent = flatExtent.toArray(Double[]::new);

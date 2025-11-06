@@ -138,7 +138,9 @@ import org.slf4j.LoggerFactory;
               //When source is geoportal and item does not have title: URI conatins access_token, remove access_token from title
               {
                   int index = title.indexOf("_access_token");
-                  title = title.substring(0,index);
+                  if (index > -1) {
+                    title = title.substring(0,index);
+                  }
               }
           }
           Path f = generateFileName(ref.getBrokerUri(), ref.getSourceUri(), title, extension);
@@ -197,7 +199,7 @@ import org.slf4j.LoggerFactory;
         subFolder.remove(0);
       }     
       for (String sf : subFolder) {
-        fileName = Paths.get(fileName.toString(), (id.isBlank() ? sf :id));
+        fileName = Paths.get(fileName.toString(), (!sf.isBlank() ? sf :id));
       }
       if (!fileName.getFileName().toString().endsWith(extension)) {
         fileName = fileName.getParent().resolve(fileName.getFileName() + "." + extension);

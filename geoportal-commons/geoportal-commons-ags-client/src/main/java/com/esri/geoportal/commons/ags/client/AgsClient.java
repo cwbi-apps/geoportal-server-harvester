@@ -19,6 +19,7 @@ import com.esri.geoportal.commons.utils.SimpleCredentials;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonParser.Feature;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.Closeable;
@@ -28,7 +29,11 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.codec.net.URLCodec;
 import org.apache.commons.io.IOUtils;
@@ -221,11 +226,58 @@ public class AgsClient implements Closeable {
       mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
       mapper.configure(Feature.ALLOW_NON_NUMERIC_NUMBERS, true);
       mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-      ItemInfo response = mapper.readValue(responseContent, ItemInfo.class);
+      
+      ItemInfo response;
+      try {
+        // try reading with extent as 1D array      
+        response = mapper.readValue(responseContent, ItemInfo.class);      
+      } catch (JsonProcessingException ex) {
+        ItemInfo2D response2D = mapper.readValue(responseContent, ItemInfo2D.class);
+        response = convertItemInfo2Dto1D(response2D);        
+      }
                       
       return response;
     }
   }
+  
+
+  public static ItemInfo convertItemInfo2Dto1D(ItemInfo2D source) {
+      ItemInfo target = new ItemInfo();
+
+      // Copy all simple fields
+      target.culture = source.culture;
+      target.name = source.name;
+      target.guid = source.guid;
+      target.catalogPath = source.catalogPath;
+      target.snippet = source.snippet;
+      target.description = source.description;
+      target.summary = source.summary;
+      target.title = source.title;
+      target.tags = source.tags;
+      target.type = source.type;
+      target.typeKeywords = source.typeKeywords;
+      target.thumbnail = source.thumbnail;
+      target.url = source.url;
+      target.spatialReference = source.spatialReference;
+      target.accessInformation = source.accessInformation;
+      target.licenseInfo = source.licenseInfo;
+      target.hasMetadata = source.hasMetadata;
+      target.metadataXML = source.metadataXML;
+
+      // Flatten extent from Double[][] to Double[]
+      if (source.extent != null) {
+          List<Double> flatExtent = new ArrayList<>();
+          for (Double[] row : source.extent) {
+              if (row != null) {
+                flatExtent.addAll(Arrays.asList(row));
+              }
+          }
+          target.extent = flatExtent.toArray(Double[]::new);
+      }
+
+      return target;
+    }
+  
   
   /**
    * Reads layer information.
@@ -243,7 +295,11 @@ public class AgsClient implements Closeable {
     if (!isValidFolderName(folder)) {
       throw new IllegalArgumentException("Invalid folder name: " + folder);
     }
-    String url = rootUrl.toURI().resolve("rest/services/").resolve(StringUtils.stripToEmpty(folder)).resolve(si.name + "/" + si.type + "/" + lRef.id).toASCIIString();
+    // for some cases service name includes the foldername
+    if (si.name.startsWith(folder + "/")) {
+      si.name = si.name.replace(folder + "/", "");
+    }
+    String url = rootUrl.toURI().resolve("rest/services/").resolve(StringUtils.stripToEmpty(folder)).resolve(URLEncoder.encode(si.name, StandardCharsets.UTF_8.toString()) + "/" + si.type + "/" + lRef.id).toASCIIString();
     
    // SSRF mitigation: ensure the constructed URL is within the rootUrl
     if (!isUrlWithinRoot(url)) {

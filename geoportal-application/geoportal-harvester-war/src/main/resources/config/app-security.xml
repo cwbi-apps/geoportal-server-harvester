@@ -9,8 +9,8 @@
   <!-- One and only one of the authentication methods must be implemented. -->
   <!-- <beans:import resource="authentication-ldap.xml"/> -->
   <!-- <beans:import resource="authentication-simple.xml"/> -->
-  <beans:import resource="authentication-simple.xml"/>
   
+  <beans:import resource="${gpt_authentication:authentication-simple.xml}"/>
   <security:http realm="Geoportal"  pattern="/**" authentication-manager-ref="authenticationManager">
 
     <security:headers>

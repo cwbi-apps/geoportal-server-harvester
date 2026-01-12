@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Attach to Tomcat (Harvester)",
+      "request": "attach",
+      "hostName": "localhost",
+      "projectName": "geoportal",
+      "port": 5005
+    }
+  ]
+}

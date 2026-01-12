@@ -1,0 +1,16 @@
+{
+  "java.compile.nullAnalysis.mode": "automatic",
+  "java.import.generatesMetadataFilesAtProjectRoot": false,
+  "java.import.maven.enabled": true,
+  "java.maven.downloadSources": true,
+  "java.format.settings.url": "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
+  "java.format.settings.profile": "GoogleStyle",
+  "editor.formatOnSave": true,
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "files.exclude": {
+    "**/.project": true,
+    "**/.classpath": true,
+    "**/.settings": true,
+    "**/.factorypath": true
+  }
+}

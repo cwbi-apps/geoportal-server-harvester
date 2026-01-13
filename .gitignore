@@ -6,6 +6,7 @@ target/
 # OpenSearch persistent data (keep folder, ignore contents)
 devops/opensearch-data/*
 !devops/opensearch-data/.gitkeep
+devops/.env
 
 # Maven
 .mvn/wrapper/maven-wrapper.jar

@@ -1,12 +1,12 @@
 {
   "name": "Data Catalog Dev (ARM)",
   "dockerComposeFile": "docker-compose.yml",
-  "service": "datacatalog",
+  "service": "datacatalog-harvester",
   "workspaceFolder": "/workspace",
-  "runServices": ["datacatalog", "opensearch"],
+  "runServices": ["datacatalog-harvester"],
   "shutdownAction": "stopCompose",
 
-  "forwardPorts": [8080, 9200, 5005],
+  "forwardPorts": [8080, 5005],
 
   "remoteUser": "vscode",
 

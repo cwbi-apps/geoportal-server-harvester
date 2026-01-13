@@ -2,7 +2,7 @@ SHELL := bash
 .DEFAULT_GOAL := help
 
 TOMCAT_WEBAPPS := /opt/tomcat/webapps
-GEO_WAR_DIR := $(TOMCAT_WEBAPPS)/catalog
+HARVESTER_WAR_DIR := $(TOMCAT_WEBAPPS)/harvester
 AUTH_DIR := /opt/tomcat/conf/authentication
 
 help:
@@ -16,18 +16,18 @@ help:
 	@echo "make logs             Tail Tomcat logs"
 
 build:
-	mvn -f geoportal/pom.xml clean package -DskipTests
+	mvn -f ./pom.xml clean package -DskipTests
 
 deploy: build
-	rm -rf $(GEO_WAR_DIR)
-	mkdir -p $(GEO_WAR_DIR)
-	unzip -q geoportal/target/*.war -d $(GEO_WAR_DIR)
-	@echo "✔ Geoportal deployed (exploded WAR)"
+	rm -rf $(HARVESTER_WAR_DIR)
+	mkdir -p $(HARVESTER_WAR_DIR)
+	unzip -q geoportal-application/geoportal-harvester-war/target/*.war -d $(HARVESTER_WAR_DIR)
+	@echo "✔ Harvester deployed (exploded WAR)"
 
 clean:
-	rm -rf $(GEO_WAR_DIR)
+	rm -rf $(HARVESTER_WAR_DIR)
 	rm -rf /opt/tomcat/logs/*
-	@echo "✔ Tomcat geoportal cleaned"
+	@echo "✔ Tomcat harvester cleaned"
 
 auth-simple:
 	@echo "authentication-simple.xml" > /tmp/gpt_auth

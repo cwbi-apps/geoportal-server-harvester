@@ -25,8 +25,8 @@
     />    
     <security:logout />
     
-    <security:intercept-url pattern="/login.html" access="permitAll" />
-    <security:intercept-url pattern="/**" access="hasRole('PUBLISHER')" />
+    <!-- <security:intercept-url pattern="/login.html" access="permitAll" />
+    <security:intercept-url pattern="/**" access="hasRole('PUBLISHER')" /> -->
     
   </security:http>
 

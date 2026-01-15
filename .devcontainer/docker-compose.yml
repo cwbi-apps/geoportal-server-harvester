@@ -25,7 +25,13 @@ services:
       gpt_elasticUser: admin
       gpt_authentication: authentication-simple.xml
     command: ["bash", "-c", "/opt/tomcat/bin/catalina.sh run"]
+    networks:
+      - gptnet
 
 volumes:
   m2:
   tomcat-webapps:
+
+networks:
+  gptnet:
+    driver: bridge
